@@ -22,7 +22,7 @@ class Setthing():
         # 背景
         self.background_img = ""
         # OneDrive共享链接 *
-        self.shared_url = "https://ibschoolnz-my.sharepoint.com/:f:/g/personal/jinglinixi_ibschoolnz_onmicrosoft_com/EkHlyvUISd9DtRJDTHtdBwEBoppYKX-IXCiH8H7JI7tyXg?e=QBH38Q"
+        self.shared_url = "https://example.com/"
         # 路径 * (路径从你OneDrive账号主路径开始，而不是共享文件夹链接路径开始)
         self.shared_path = "共享"
 
