@@ -6,6 +6,9 @@
 
 [演示网址](http://pyoneweb.vaiwan.com/)
 
+## 视频教程
+https://www.bilibili.com/video/BV1Sa411k71c
+
 
 ## 初始化
 
@@ -43,4 +46,4 @@
 
 ## 运行
 
-在文件夹里启动cmd，并输入python index.py 即可使用
+在文件夹里启动cmd，并输入python3 index.py 即可使用
