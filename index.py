@@ -9,6 +9,10 @@ app = Flask(__name__)
 class Setthing():
     def __init__(self):
         # 带*表示必填
+        # 端口 *
+        self.port = 8080
+        # IP *
+        self.host = "0.0.0.0"
         # 网站标题
         self.title = "PyOneWeb"
         # 网站名
@@ -24,7 +28,7 @@ class Setthing():
         # OneDrive共享链接 *
         self.shared_url = "https://example.com/"
         # 路径 * (路径从你OneDrive账号主路径开始，而不是共享文件夹链接路径开始)
-        self.shared_path = "共享"
+        self.shared_path = "/"
 
 
 setthing = Setthing()
@@ -175,4 +179,4 @@ def api():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080, host="0.0.0.0")
+    app.run(debug=True, port=setthing.port, host=setthing.host)
