@@ -4,6 +4,7 @@
 
 [GitHub](https://github.com/bytfr/PyOneWeb) [Gitee](https://gitee.com/grmine/PyOneWeb)
 
+[演示网址](http://pyoneweb.vaiwan.com/)
 
 
 ## 初始化
@@ -22,6 +23,8 @@
 3. 进入到 **index.py** 文件中，找到**第九行( class Setthing(): )**，按照格式和注释进行设置
 
    > ```python
+   > self.port = 8080 #这是网站端口，必填，运行前确保端口没有被占用
+   > self.host = "0.0.0.0" #网站IP，必填，如果无法访问请先检查IP是否正确
    > self.title = "这里面输入网站标题，可留空"
    > self.name = "这里面输入网站主页面显示的标题，可留空"
    > self.logo_url = "这里输入网页logo链接，可留空，但在指定模板可能会因为格式问题显得难看"
