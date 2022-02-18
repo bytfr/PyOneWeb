@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }} - 后台管理</title>
+</head>
+<body>
+<div align="center">
+<h2>后台管理</h2>
+    <form method="POST">
+        端口:<input type="text" name="port"  placeholder="port" value="{{port}}"><br>
+        IP:<input type="text" name="ip" placeholder="ip" value="{{ip}}"><br>
+        顶标题:<input type="text" name="title" placeholder="title" value="{{title}}"><br>
+        大标题:<input type="text" name="name" placeholder="name" value="{{name}}"><br>
+        Logo:<input type="text" name="logo_url" placeholder="logo_url" value="{{logo_url}}"><br>
+        邮箱:<input type="text" name="e_mail" placeholder="e_mail" value="{{e_mail}}"><br>
+        模板:<input type="text" name="template" placeholder="template" value="{{template}}"><br>
+        背景图:<input type="text" name="background" placeholder="background" value="{{background}}"><br>
+        OneDrive共享链接:<input type="text" name="shared_url" placeholder="shared_url" value="{{shared_url}}"><br>
+        OneDrive共享路径:<input type="text" name="shared_path" placeholder="shared_path" value="{{shared_path}}"><br>
+        密码:<input type="password" name="password" placeholder="password" value="{{password}}"><br>
+        <input type="submit" value="保存"><br>
+        {{msg}}
+    </form>
+</div>
+
+</body>
+</html>
