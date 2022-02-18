@@ -1,38 +1,73 @@
 # coding:utf-8
-import onedrive
-from flask import Flask, render_template, request
+import onedrive, json, os
+from flask import Flask, render_template, request, session, redirect
 
 app = Flask(__name__)
 
 
 # 设置
-class Setthing():
+class Setthing:
     def __init__(self):
-        # 带*表示必填
-        # 端口 *
+        self.install = False
         self.port = 8080
-        # IP *
         self.host = "0.0.0.0"
-        # 网站标题
         self.title = "PyOneWeb"
-        # 网站名
         self.name = "PyOneWeb"
-        # 网页logo
         self.logo_url = "https://static-dbbdc8e5-5f50-4106-bc71-b5a5eedf6400.bspapp.com/grmine_logo.png"
-        # 邮箱
         self.e_mail = "example@example.com"
-        # 模板 *
         self.template = "neo"
-        # 背景
         self.background_img = ""
-        # OneDrive共享链接 *
-        self.shared_url = "https://example.com/"
-        # 路径 * (路径从你OneDrive账号主路径开始，而不是共享文件夹链接路径开始)
-        self.shared_path = "/"
+        self.shared_url = ""
+        self.shared_path = ""
+        self.password = "123456"
+
+    def get_config(self):
+        global OneDriveSDK
+        with open("./setthing.json", "r") as config:
+            set = json.loads(config.read().replace("'", '"'))
+            self.port = set['port']
+            self.host = set['ip']
+            self.title = set['title']
+            self.name = set['name']
+            self.logo_url = set['logo_url']
+            self.e_mail = set['e_mail']
+            self.template = set['template']
+            self.background_img = set['background']
+            self.shared_url = set['shared_url']
+            self.shared_path = set['shared_path']
+            self.password = set['password']
+            if set['install'] == "True":
+                self.install = True
+            else:
+                self.install = False
+            try:
+                OneDriveSDK = onedrive.OneDriveSDK(self.shared_url, self.shared_path)
+            except:
+                pass
+            config.close()
+
+    def write_config(self):
+        config = {"port": self.port, "ip": self.host, "title": self.title, "name": self.name, "logo_url": self.logo_url,
+                  "e_mail": self.e_mail, "template": self.template, "background": self.background_img,
+                  "shared_url": self.shared_url, "shared_path": self.shared_path, "password": self.password,"install":str(self.install)}
+        with open("./setthing.json", "w") as s:
+            s.write(str(config).replace("'", '"'))
+            s.close()
 
 
 setthing = Setthing()
-OneDriveSDK = onedrive.OneDriveSDK(setthing.shared_url, setthing.shared_path)
+
+if not os.path.exists("./setthing.json"):
+    setthing.write_config()
+
+setthing.get_config()
+
+print(setthing.install)
+if setthing.install:
+    try:
+        OneDriveSDK = onedrive.OneDriveSDK(setthing.shared_url, setthing.shared_path)
+    except:
+        pass
 
 
 # 获取上一路径
@@ -101,10 +136,31 @@ def isDir(path):
         return True
     return False
 
+@app.route('/install', methods=['get','post'])
+def install():
+    global setthing
+    if setthing.install:
+        return redirect("/")
+    page = request.values.get("page")
+    if page=="1":
+        if request.method == 'POST':
+            setthing.shared_url=request.form.get("shared_url")
+            return redirect("/install?page=2")
+        else:
+            return render_template("install/1.html")
+    if page=="2":
+        setthing.install=True
+        setthing.write_config()
+        setthing.get_config()
+        return render_template("install/2.html")
+    else:
+        return redirect("/install?page=1")
 
 # 主函数
-@app.route('/', methods=['get'])
+@app.route('/', methods=['get', 'post'])
 def main():
+    if not setthing.install:
+        return redirect("/install?page=1")
     list = []
     for r in request.values:
         list.append(r)
@@ -117,9 +173,9 @@ def main():
         up_file = get_up_file(index)
         index_list = index.split("/")
         index_list.pop(0)
-        print(index_list)
         try:
             file = get_file(index)
+            print(index_list)
             return render_template(setthing.template + '/index.html', up_file=up_file, logo_url=setthing.logo_url,
                                    e_mail=setthing.e_mail, index=index,
                                    name=setthing.name, file=file[index], background_img=setthing.background_img,
@@ -140,8 +196,7 @@ def main():
         for i in get_file(filepath)[filepath]:
             if i['type'] == 'file' and i['name'] == filename:
                 download_url = i['download_url']
-                return render_template(setthing.template + '/download.html', download_url=download_url,
-                                       title=setthing.title)
+                return redirect(download_url)
         return render_template(setthing.template + '/index.html', up_file="/", logo_url=setthing.logo_url,
                                e_mail=setthing.e_mail, index=index,
                                name=setthing.name, file=[
@@ -177,6 +232,56 @@ def api():
                 return {"download_url": download_url}
         return "Error 404"
 
+app.secret_key = 'QWERTYUIOP'
+
+@app.route('/login', methods=['get', 'post'])
+def login():
+    if request.method == 'GET':
+        return render_template('admin/index.html',title = setthing.title)
+    user = request.form.get('user')
+    pwd = request.form.get('pwd')
+    if user == 'admin' and pwd == setthing.password:  # 这里可以根据数据库里的用户和密码来判断，因为是最简单的登录界面，数据库学的不是很好，所有没用。
+        session['user_info'] = user
+        return redirect('/admin')
+    else:
+        return render_template('admin/index.html', msg='用户名或密码输入错误',title = setthing.title)
+
+@app.route('/admin',methods=['get','post'])
+def admin():
+    global setthing
+    user_info = session.get('user_info')
+    if not user_info:
+        return redirect('/login')
+    if request.method == 'POST':
+        setthing.port = request.form.get('port')
+        setthing.host = request.form.get('ip')
+        setthing.title = request.form.get('title')
+        setthing.name = request.form.get('name')
+        setthing.logo_url = request.form.get('logo_url')
+        setthing.e_mail = request.form.get('e_mail')
+        setthing.template = request.form.get('template')
+        setthing.background_img = request.form.get('background')
+        setthing.shared_url = request.form.get('shared_url')
+        setthing.shared_path = request.form.get('shared_path')
+        setthing.password = request.form.get('password')
+        setthing.write_config()
+        setthing.get_config()
+        return render_template('admin/admin.html', port=setthing.port, ip=setthing.host, title=setthing.title,
+                               name=setthing.name, logo_url=setthing.logo_url, e_mail=setthing.e_mail,
+                               template=setthing.template, background=setthing.background_img,
+                               shared_url=setthing.shared_url, shared_path=setthing.shared_path,
+                               password=setthing.password,msg="修改成功")
+    else:
+        return render_template('admin/admin.html', port=setthing.port, ip=setthing.host, title=setthing.title,
+                               name=setthing.name, logo_url=setthing.logo_url, e_mail=setthing.e_mail,
+                               template=setthing.template, background=setthing.background_img,
+                               shared_url=setthing.shared_url, shared_path=setthing.shared_path,
+                               password=setthing.password)
+
+@app.route('/logout')
+def logout_():
+    del session['user_info']
+    return redirect('login')
 
 if __name__ == '__main__':
     app.run(debug=True, port=setthing.port, host=setthing.host)
