@@ -714,12 +714,19 @@ body {
 	<div class="mdui-container">
 	    <div class="mdui-container-fluid">
 	    <div class="mdui-toolbar nexmoe-item">
+			<a one-link-mark="yes">{{name}}</a>
+			&nbsp>&nbsp
 			{% for i in index_list %}
 				{% if i != "" %}
-					<a href="" one-link-mark="yes">/</a>
-					<a href="" one-link-mark="yes">{{i}}</a>
+
+					<a one-link-mark="yes">/</a>
+					&nbsp>&nbsp
+					<a one-link-mark="yes">{{i}}</a>
+					{% if i!=index_list[-2] %}
+					&nbsp>&nbsp
+					{% endif %}
 				{% elif index_list[0] == "" %}
-					<a href="" one-link-mark="yes">/</a>
+					<a one-link-mark="yes">/</a>
 				{% endif %}
 			{% endfor %}
 		</div>
