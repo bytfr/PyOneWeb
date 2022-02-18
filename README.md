@@ -21,29 +21,21 @@ https://www.bilibili.com/video/BV1Sa411k71c
    pip3 install requests
    ```
 
+3. 运行
+
+   在文件夹里启动cmd，并输入python index.py 即可运行
    
+4. 配置
 
-3. 进入到 **index.py** 文件中，找到**第九行( class Setthing(): )**，按照格式和注释进行设置
+   在第一次使用，网页会自动跳转到安装页面，按照提示进行配置。
 
-   > ```python
-   > self.port = 8080 #这是网站端口，必填，运行前确保端口没有被占用
-   > self.host = "0.0.0.0" #网站IP，必填，如果无法访问请先检查IP是否正确
-   > self.title = "这里面输入网站标题，可留空"
-   > self.name = "这里面输入网站主页面显示的标题，可留空"
-   > self.logo_url = "这里输入网页logo链接，可留空，但在指定模板可能会因为格式问题显得难看"
-   > self.e_mail = "网页反馈及联系邮箱，可留空"
-   > self.template = "网页模板，必填，填写template文件夹下任意模板(文件夹)名，如: neo"
-   > self.background_img = "网页背景，可空"
-   > self.shared_url = "OneDrive共享链接，必填，不填 共享个 锤子 啊"
-   > self.shared_path = "根目录，必填，默认根目录不是OneDrive共享链接根目录，是你OneDrive账号根目录，如下图"
-   > ```
+   管理员登录面板：网址+/login
 
-   ![image-20220216180345828](https://s4.ax1x.com/2022/02/16/Hh8gV1.png)
-
-   假如你要共享的是“共享”文件夹，那么你要右键"共享"文件夹，然后点击共享，选择""拥有链接的人都可编辑"，复制链接到self.shared_url，并将self.shared_path设置为"共享"
+   如果主页面出现了404或报错无法访问的情况下，请进入管理员面板检查配置是否出错，如果连管理员面板也无法进入，请编辑或删除setthing.json文件。
 
 
 
-## 运行
+# 警告！
 
-在文件夹里启动cmd，并输入python index.py 即可使用
+### 请不要因为任何情况将setthing.json泄露给任何人，这可能会影响你的OneDrive账号安全，如果已经泄露请更改后台密码并更改OneDrive共享链接
+
