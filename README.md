@@ -4,10 +4,11 @@
 
 [GitHub](https://github.com/bytfr/PyOneWeb) [Gitee](https://gitee.com/grmine/PyOneWeb)
 
-[演示网址](http://pyoneweb.vaiwan.com/)
+[演示网址](http://bytfr.pythonanywhere.com/)
 
 ## 视频教程
-https://www.bilibili.com/video/BV1Sa411k71c 此为v1.0.0教程，与v1.2.0相差不大
+
+https://www.bilibili.com/video/BV1Sa411k71c
 
 
 ## 初始化
@@ -23,8 +24,8 @@ https://www.bilibili.com/video/BV1Sa411k71c 此为v1.0.0教程，与v1.2.0相差
 
 3. 运行
 
-   在文件夹里启动cmd，并输入python index.py 即可运行
-   
+   运行 run.cmd 或在文件夹打开cmd输入 gunicorn -w4 -b 0.0.0.0:80 index:app
+
 4. 配置
 
    在第一次使用，网页会自动跳转到安装页面，按照提示进行配置。
