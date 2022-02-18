@@ -7,7 +7,7 @@
 [演示网址](http://pyoneweb.vaiwan.com/)
 
 ## 视频教程
-https://www.bilibili.com/video/BV1Sa411k71c
+https://www.bilibili.com/video/BV1Sa411k71c 此为v1.0.0教程，与v1.2.0相差不大
 
 
 ## 初始化
