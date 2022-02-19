@@ -9,8 +9,6 @@ app = Flask(__name__)
 class Setthing:
     def __init__(self):
         self.install = False
-        self.port = 8080
-        self.host = "0.0.0.0"
         self.title = "PyOneWeb"
         self.name = "PyOneWeb"
         self.logo_url = "https://static-dbbdc8e5-5f50-4106-bc71-b5a5eedf6400.bspapp.com/grmine_logo.png"
@@ -25,8 +23,6 @@ class Setthing:
         global OneDriveSDK
         with open("./setthing.json", "r") as config:
             set = json.loads(config.read().replace("'", '"'))
-            self.port = set['port']
-            self.host = set['ip']
             self.title = set['title']
             self.name = set['name']
             self.logo_url = set['logo_url']
@@ -47,7 +43,7 @@ class Setthing:
             config.close()
 
     def write_config(self):
-        config = {"port": self.port, "ip": self.host, "title": self.title, "name": self.name, "logo_url": self.logo_url,
+        config = {"title": self.title, "name": self.name, "logo_url": self.logo_url,
                   "e_mail": self.e_mail, "template": self.template, "background": self.background_img,
                   "shared_url": self.shared_url, "shared_path": self.shared_path, "password": self.password,"install":str(self.install)}
         with open("./setthing.json", "w") as s:
@@ -62,7 +58,6 @@ if not os.path.exists("./setthing.json"):
 
 setthing.get_config()
 
-print(setthing.install)
 if setthing.install:
     try:
         OneDriveSDK = onedrive.OneDriveSDK(setthing.shared_url, setthing.shared_path)
@@ -175,7 +170,6 @@ def main():
         index_list.pop(0)
         try:
             file = get_file(index)
-            print(index_list)
             return render_template(setthing.template + '/index.html', up_file=up_file, logo_url=setthing.logo_url,
                                    e_mail=setthing.e_mail, index=index,
                                    name=setthing.name, file=file[index], background_img=setthing.background_img,
@@ -253,8 +247,6 @@ def admin():
     if not user_info:
         return redirect('/login')
     if request.method == 'POST':
-        setthing.port = request.form.get('port')
-        setthing.host = request.form.get('ip')
         setthing.title = request.form.get('title')
         setthing.name = request.form.get('name')
         setthing.logo_url = request.form.get('logo_url')
@@ -266,13 +258,13 @@ def admin():
         setthing.password = request.form.get('password')
         setthing.write_config()
         setthing.get_config()
-        return render_template('admin/admin.html', port=setthing.port, ip=setthing.host, title=setthing.title,
+        return render_template('admin/admin.html', title=setthing.title,
                                name=setthing.name, logo_url=setthing.logo_url, e_mail=setthing.e_mail,
                                template=setthing.template, background=setthing.background_img,
                                shared_url=setthing.shared_url, shared_path=setthing.shared_path,
                                password=setthing.password,msg="修改成功")
     else:
-        return render_template('admin/admin.html', port=setthing.port, ip=setthing.host, title=setthing.title,
+        return render_template('admin/admin.html', title=setthing.title,
                                name=setthing.name, logo_url=setthing.logo_url, e_mail=setthing.e_mail,
                                template=setthing.template, background=setthing.background_img,
                                shared_url=setthing.shared_url, shared_path=setthing.shared_path,
@@ -284,4 +276,4 @@ def logout_():
     return redirect('login')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=setthing.port, host=setthing.host)
+    app.run(debug=True, port=80, host="0.0.0.0")
