@@ -167,7 +167,7 @@ def main():
     if not setthing.install:
         return redirect("/install?page=1")
     try:
-        if time.time() - setthing.time >= 60:
+        if time.time() - setthing.time >= 1800:
             OneDriveSDK = onedrive.OneDriveSDK(setthing.shared_url, setthing.shared_path)
             print("update")
     except Exception:
