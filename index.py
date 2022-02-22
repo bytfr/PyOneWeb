@@ -115,6 +115,7 @@ def get_file(path):
     file = {}
     file1 = OneDriveSDK.get_folder_file(path1)
     file[path] = []
+    file["download_url"]={}
     for i in file1:
         if covertFukeSize(i["size"]) is None:
             i["size"] = "0 KB"
@@ -128,9 +129,10 @@ def get_file(path):
                 {"name": i["name"], "size": i["size"], "date": i["fileSystemInfo"]["lastModifiedDateTime"],
                  "url": path + i["name"] + "/", "type": "path"})
         else:
-            file[path].append({"name": i["name"], "download_url": i["@content.downloadUrl"], "size": i["size"],
+            file[path].append({"name": i["name"], "size": i["size"],
                                "date": i["fileSystemInfo"]["lastModifiedDateTime"], "url": path + i["name"],
                                "type": "file"})
+            file["download_url"][i["name"]] = i["@content.downloadUrl"]
     return file
 
 
@@ -206,10 +208,10 @@ def main():
             fullfilenamelist = fullfilename.split('/')
             filename = fullfilenamelist[-1]
             filepath = fullfilename.replace('/%s' % filename, '')
-            for i in get_file(filepath)[filepath]:
-                if i['type'] == 'file' and i['name'] == filename:
-                    download_url = i['download_url']
-                    return redirect(download_url)
+            download_url = get_file(filepath)["download_url"]
+            if filename in download_url:
+                download_url = download_url[filename]
+                return redirect(download_url)
             return render_template(setthing.template + '/index.html', up_file="/", logo_url=setthing.logo_url,
                                    e_mail=setthing.e_mail, index=index,
                                    name=setthing.name, file=[
@@ -247,11 +249,10 @@ def api():
             fullfilenamelist = fullfilename.split('/')
             filename = fullfilenamelist[-1]
             filepath = fullfilename.replace('/%s' % filename, '')
-            print(filename, filepath)
-            for i in get_file(filepath)[filepath]:
-                if i['type'] == 'file' and i['name'] == filename:
-                    download_url = i['download_url']
-                    return {"download_url": download_url}
+            download_url = get_file(filepath)["download_url"]
+            if filename in download_url:
+                download_url = download_url[filename]
+                return {"download_url": download_url}
             return "Error 404"
         except Exception:
             return "Error 404"
@@ -313,17 +314,17 @@ def preview(p, file):
         index_list.append("")
         type = filename.split(".")[-1]
         url = "/?" + filepath + "/" + filename
-        for i in get_file(filepath)[filepath]:
-            if i['type'] == 'file' and i['name'] == filename:
-                download_url = i['download_url']
-                text = ""
-                if type in ["txt", "json", "html", "md"]:
-                    text = requests.get(download_url).text
-                return render_template(setthing.template + '/preview.html', text=text, up_file=filepath,type=type,
-                                       download_url=download_url, logo_url=setthing.logo_url,
-                                       e_mail=setthing.e_mail, index=filepath,
-                                       name=setthing.name, background_img=setthing.background_img,
-                                       title=setthing.title, index_list=index_list, url=url)
+        download_url = get_file(filepath)["download_url"]
+        if filename in download_url:
+            download_url = download_url[filename]
+            text = ""
+            if type in ["txt", "json", "html", "md"]:
+                text = requests.get(download_url).text
+            return render_template(setthing.template + '/preview.html', text=text, up_file=filepath,type=type,
+                                   download_url=download_url, logo_url=setthing.logo_url,
+                                   e_mail=setthing.e_mail, index=filepath,
+                                   name=setthing.name, background_img=setthing.background_img,
+                                   title=setthing.title, index_list=index_list, url=url)
         return render_template(setthing.template + '/preview.html', up_file="/", logo_url=setthing.logo_url,
                                e_mail=setthing.e_mail, index=filepath,
                                name=setthing.name, file=[
