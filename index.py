@@ -1,11 +1,11 @@
 # coding:utf-8
-import threading
-import time
-
-import requests
-
-import onedrive, json, os
 from flask import Flask, render_template, request, session, redirect
+
+import json
+import onedrive
+import os
+import requests
+import time
 
 app = Flask(__name__)
 
@@ -173,7 +173,6 @@ def main():
     try:
         if time.time() - setthing.time >= 1800:
             OneDriveSDK = onedrive.OneDriveSDK(setthing.shared_url, setthing.shared_path)
-            print("update")
     except Exception:
         pass
     list = []
@@ -241,7 +240,7 @@ def api():
         try:
             file = get_file(index)
             return str(file[index])
-        except:
+        except Exception:
             return "Error"
     else:
         try:
