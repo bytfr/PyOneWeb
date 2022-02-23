@@ -6,7 +6,8 @@
 
 [GitHub](https://github.com/bytfr/PyOneWeb) [Gitee](https://gitee.com/grmine/PyOneWeb)
 
-[演示网址](http://bytfr.pythonanywhere.com/)
+[演示网址 (PythonAnywhere搭建)](http://bytfr.pythonanywhere.com/)
+[演示网址 (腾讯云搭建)](http://110.42.148.82/)
 
 
 
