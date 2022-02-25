@@ -136,6 +136,29 @@ def get_file(path):
     return file
 
 
+# 404错误
+@app.errorhandler(404)
+def Error_notfound(e):
+    return render_template(setthing.template + '/index.html', up_file="/", logo_url=setthing.logo_url,
+                           e_mail=setthing.e_mail, index="Error",
+                           name=setthing.name, file=[
+            {"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"},
+            {"name": "NotFound 没有这个文件或路径", "size": "", "date": "", "url": "", "type": "file"}
+        ], background_img=setthing.background_img,
+                           title=setthing.title, index_list=["Error",""])
+
+
+@app.errorhandler(500)
+def Error_500(e):
+    return render_template(setthing.template + '/index.html', up_file="/", logo_url=setthing.logo_url,
+                           e_mail=setthing.e_mail, index="Error",
+                           name=setthing.name, file=[
+            {"name": "Error 500 服务器内部错误", "size": "", "date": "", "url": "", "type": "file"},
+            {"name": "如果你是用户，请联系网页搭建者"+setthing.e_mail, "size": "", "date": "", "url": "mailto:"+setthing.e_mail, "type": "file"},
+            {"name": "如果你是开发者，请联系邮箱2678509244@qq.com", "size": "", "date": "", "url": "mailto:"+setthing.e_mail, "type": "file"}
+        ], background_img=setthing.background_img,
+                           title=setthing.title, index_list=["Error",""])
+
 # 判断是否为路径
 def isDir(path):
     if path[-1] == "/":
