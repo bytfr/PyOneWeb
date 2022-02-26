@@ -38,6 +38,7 @@ https://www.bilibili.com/video/BV1Sa411k71c
    ```shell
    pip3 install flask
    pip3 install requests
+   pip3 install markdown
    ```
 
 3. 运行

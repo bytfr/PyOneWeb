@@ -1,4 +1,5 @@
 # coding:utf-8
+import flask
 from flask import Flask, render_template, request, session, redirect
 
 import json
@@ -6,6 +7,7 @@ import onedrive
 import os
 import requests
 import time
+import markdown
 
 app = Flask(__name__)
 
@@ -342,6 +344,11 @@ def preview(p, file):
             text = ""
             if type in ["txt", "json", "html", "md"]:
                 text = requests.get(download_url).text
+                if type in ["html","md"]:
+                    if type == "md":
+                        text = flask.Markup(markdown.markdown(text))
+                    elif type == "html":
+                        return flask.Markup(text)
             return render_template(setthing.template + '/preview.html', text=text, up_file=filepath,type=type,
                                    download_url=download_url, logo_url=setthing.logo_url,
                                    e_mail=setthing.e_mail, index=filepath,
