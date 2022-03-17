@@ -152,11 +152,13 @@ def get_file(path):
             file["download_url"][i["name"]] = i["@content.downloadUrl"]
     return file
 
+
 # 判断是否为路径
 def isDir(path):
     if path[-1] == "/":
         return True
     return False
+
 
 set = Setthing()
 
