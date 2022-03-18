@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="../statics/nexmoe/IMG/OneIndexM.svg">
+    <link rel="icon" href="../statics/nexmoe/IMG/OneIndexM.svg">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+	<title>PyOneWeb 系统安装</title>
+	<link rel="stylesheet" href="//cdnjs.loli.net/ajax/libs/mdui/0.4.3/css/mdui.min.css">
+    <script src="../statics/nexmoe/js/mdui.min.js"></script>
+		<style>
+		.mdui-appbar .mdui-toolbar{
+			height:56px;
+			font-size: 16px;
+		}
+		.mdui-toolbar>*{
+			padding: 0 6px;
+			margin: 0 2px;
+			opacity:0.5;
+		}
+		.mdui-toolbar>.mdui-typo-headline{
+			padding: 0 16px 0 0;
+		}
+		.mdui-toolbar>i{
+			padding: 0;
+		}
+		.mdui-toolbar>a:hover,a.mdui-typo-headline,a.active{
+			opacity:1;
+		}
+		.mdui-container{
+			max-width:980px;
+		}
+		.mdui-list-item{
+			-webkit-transition:none;
+			transition:none;
+		}
+		.mdui-list>.th{
+			background-color:initial;
+		}
+		.mdui-list-item>a{
+			width:100%;
+			line-height: 48px
+		}
+		.mdui-list-item{
+			margin: 2px 0px;
+			padding:0;
+		}
+		.mdui-toolbar>a:last-child{
+			opacity:1;
+		}
+		@media screen and (max-width:980px){
+			.mdui-list-item .mdui-text-right{
+				display: none;
+			}
+			.mdui-container{
+				width:100% !important;
+				margin:0px;
+			}
+			.mdui-toolbar>*{
+				display: none;
+			}
+			.mdui-toolbar>a:last-child,.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>i:first-child{
+				display: block;
+			}
+		}
+	</style>
+</head>
+<body class="mdui-theme-primary-blue-grey mdui-theme-accent-blue">
+	<header class="mdui-appbar mdui-color-theme">
+		<div class="mdui-toolbar mdui-container">
+			<a href="/" class="mdui-typo-headline">PyOneWeb</a>
+						<!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>-->
+		</div>
+	</header>
+	
+	<div class="mdui-container">
+    	
+<div class="mdui-container-fluid">
+	<div class="mdui-typo">
+	  <h1>程序安装 <small>环境检测</small></h1>
+	</div>
+
+	<div class="mdui-table-fluid">
+	  <table class="mdui-table">
+	    <thead>
+	      <tr>
+	        <th>环境需求</th>
+	        <th>当前环境</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+		  {% for i in tj %}
+		  	{% if i!="go" %}
+				  <tr>
+
+					<td>{{ i }}</td>
+					  {% if tj[i] == True %}
+						<td><i class="mdui-icon material-icons" style="color:#4caf50;">&#xe5ca;</i></td>
+					  {% else %}
+						<td><i class="mdui-icon material-icons" style="color:#f44336;">&#xe5cd;</i></td>
+					  {% endif %}
+				  </tr>
+		  	{% endif %}
+		  {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+	<br><br>
+		{% if tj["go"] == True %}
+			<a class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right" href="/install?page=1" one-link-mark="yes">下一步</a>
+	<!--<a class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-left" href="?step=1">上一步</a>-->
+		{% else %}
+			<button class="mdui-btn mdui-btn-raised  mdui-float-right disabled" disabled>下一步</button>
+		{% endif %}
+	</div>
+
+  	</div>
+</body>
+</html>
+
