@@ -288,6 +288,10 @@ def main():
     if not list:
         list.append("/")
     index = list[0]
+    '''
+    致改源码的你
+    print("wdnmd")
+    '''
     # 判断是否为路径
     if isDir(index):
         # 获取文件
@@ -343,12 +347,17 @@ def api():
     if not list:
         list.append("/")
     index = list[0]
+    print(index)
     if isDir(index):
+        index_list = index.split("/")
         try:
-            file = get_file(index)
-            return str(file[index])
+            api_dict = {"file_list": get_file(index)[index], "index": index, "up_file":
+                get_up_file(index), "index_list": index_list, "name": set.name}
+            return str(api_dict)
         except Exception:
-            return "Error"
+            return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
+                    "index": "Error", "up_file":
+                        "/"})
     else:
         try:
             fullfilename = index
@@ -358,10 +367,14 @@ def api():
             download_url = get_file(filepath)["download_url"]
             if filename in download_url:
                 download_url = download_url[filename]
-                return {"download_url": download_url}
-            return "Error 404"
+                return {"download_url": download_url, "index": index, "up_file": get_up_file(index)}
+            return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
+                    "index": "Error", "up_file":
+                        "/"})
         except Exception:
-            return "Error 404"
+            return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
+                    "index": "Error", "up_file":
+                        "/"})
 
 
 # 后台登录
