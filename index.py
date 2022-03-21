@@ -1,16 +1,19 @@
 # coding:utf-8
 import flask
 from flask import Flask, render_template, request, session, redirect
+from flask_cors import *
 
 import json
 import os
 import time
 import onedrive
+
 try:
     import requests
     import markdown
 except Exception:
     pass
+
 
 # ======= 函数、类、全局变量声明 ======= #
 
@@ -175,6 +178,7 @@ OneDriveSDK = set.init()
 
 app = Flask(__name__)
 app.secret_key = 'QWERTYUIOP'
+CORS(app, supports_credentials=True)
 
 
 # 404 错误
@@ -219,7 +223,7 @@ def install():
         tj = {"go": True}
 
         import platform
-        if platform.python_version()[0]=="3":
+        if platform.python_version()[0] == "3":
             tj["Python"] = True
         else:
             tj["Python"] = False
@@ -246,7 +250,6 @@ def install():
             tj["markdown"] = False
             tj["go"] = False
         return render_template("install/0.html", tj=tj)
-
 
     # 页数 1
     if page == "1":
@@ -340,14 +343,20 @@ def main():
 # api函数
 @app.route('/api', methods=['get'])
 def api():
-    global file, yu_load_isok
+    global file, yu_load_isok, OneDriveSDK
     list = []
     for r in request.values:
         list.append(r)
     if not list:
         list.append("/")
     index = list[0]
-    print(index)
+    try:
+        # 如果距离第一次刷新超过30分钟
+        if time.time() - set.time >= 1800:
+            # 刷新
+            OneDriveSDK = onedrive.OneDriveSDK(set.shared_url, set.shared_path)
+    except Exception:
+        pass
     if isDir(index):
         index_list = index.split("/")
         try:
@@ -356,8 +365,8 @@ def api():
             return str(api_dict)
         except Exception:
             return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
-                    "index": "Error", "up_file":
-                        "/"})
+                        "index": "Error", "up_file":
+                            "/"})
     else:
         try:
             fullfilename = index
@@ -367,14 +376,67 @@ def api():
             download_url = get_file(filepath)["download_url"]
             if filename in download_url:
                 download_url = download_url[filename]
-                return {"download_url": download_url, "index": index, "up_file": get_up_file(index)}
+                return str({"download_url": download_url, "index": index, "up_file": get_up_file(index)})
             return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
-                    "index": "Error", "up_file":
-                        "/"})
+                        "index": "Error", "up_file":
+                            "/"})
         except Exception:
             return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
-                    "index": "Error", "up_file":
-                        "/"})
+                        "index": "Error", "up_file":
+                            "/"})
+
+
+# 在线预览
+@app.route('/api/preview/<path:p>/<string:file>')
+def preview_api(p, file):
+    try:
+        # 文件名
+        filename = file
+        # 文件路径
+        filepath = "/" + p
+        # 路径
+        index_list = (p + "/" + filename).split("/")
+        # 结尾
+        index_list.append("")
+        # 获取文件类型
+        type = filename.split(".")[-1]
+        # 下载路径
+        url = "/?" + filepath + "/" + filename
+        # 下载链接
+        download_url = get_file(filepath)["download_url"]
+        # 如果文件存在
+        if filename in download_url:
+            download_url = download_url[filename]
+            text = ""
+            # 如果文件是纯文本
+            if type in ["txt", "json", "html", "md"]:
+                # 获取文件内容
+                text = requests.get(download_url).text
+                # 如果文件是纯文本但有样式
+                if type in ["html", "md"]:
+                    if type == "md":
+                        text = flask.Markup(markdown.markdown(text))
+                    elif type == "html":
+                        return flask.Markup(text)
+            return render_template(set.template + '/preview.html', text=text, up_file=filepath, type=type,
+                                   download_url=download_url, logo_url=set.logo_url,
+                                   e_mail=set.e_mail, index=filepath,
+                                   name=set.name, background_img=set.background_img,
+                                   title=set.title, index_list=index_list, url=url)
+        # 否则返回404
+        return render_template(set.template + '/preview.html', up_file="/", logo_url=set.logo_url,
+                               e_mail=set.e_mail, index=filepath,
+                               name=set.name, file=[
+                {"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}
+            ], background_img=set.background_img,
+                               title=set.title, index_list=["Error"])
+    except Exception:
+        return render_template(set.template + '/preview.html', up_file="/", logo_url=set.logo_url,
+                               e_mail=set.e_mail, index="/" + p,
+                               name=set.name, file=[
+                {"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}
+            ], background_img=set.background_img,
+                               title=set.title, index_list=["Error"])
 
 
 # 后台登录
