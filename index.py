@@ -366,7 +366,7 @@ def api():
         except Exception:
             return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
-                            "/"})
+                            "/", "name": set.name})
     else:
         try:
             fullfilename = index
@@ -379,64 +379,11 @@ def api():
                 return str({"download_url": download_url, "index": index, "up_file": get_up_file(index)})
             return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
-                            "/"})
+                            "/", "name": set.name})
         except Exception:
             return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
-                            "/"})
-
-
-# 在线预览
-@app.route('/api/preview/<path:p>/<string:file>')
-def preview_api(p, file):
-    try:
-        # 文件名
-        filename = file
-        # 文件路径
-        filepath = "/" + p
-        # 路径
-        index_list = (p + "/" + filename).split("/")
-        # 结尾
-        index_list.append("")
-        # 获取文件类型
-        type = filename.split(".")[-1]
-        # 下载路径
-        url = "/?" + filepath + "/" + filename
-        # 下载链接
-        download_url = get_file(filepath)["download_url"]
-        # 如果文件存在
-        if filename in download_url:
-            download_url = download_url[filename]
-            text = ""
-            # 如果文件是纯文本
-            if type in ["txt", "json", "html", "md"]:
-                # 获取文件内容
-                text = requests.get(download_url).text
-                # 如果文件是纯文本但有样式
-                if type in ["html", "md"]:
-                    if type == "md":
-                        text = flask.Markup(markdown.markdown(text))
-                    elif type == "html":
-                        return flask.Markup(text)
-            return render_template(set.template + '/preview.html', text=text, up_file=filepath, type=type,
-                                   download_url=download_url, logo_url=set.logo_url,
-                                   e_mail=set.e_mail, index=filepath,
-                                   name=set.name, background_img=set.background_img,
-                                   title=set.title, index_list=index_list, url=url)
-        # 否则返回404
-        return render_template(set.template + '/preview.html', up_file="/", logo_url=set.logo_url,
-                               e_mail=set.e_mail, index=filepath,
-                               name=set.name, file=[
-                {"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}
-            ], background_img=set.background_img,
-                               title=set.title, index_list=["Error"])
-    except Exception:
-        return render_template(set.template + '/preview.html', up_file="/", logo_url=set.logo_url,
-                               e_mail=set.e_mail, index="/" + p,
-                               name=set.name, file=[
-                {"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}
-            ], background_img=set.background_img,
-                               title=set.title, index_list=["Error"])
+                            "/", "name": set.name})
 
 
 # 后台登录
