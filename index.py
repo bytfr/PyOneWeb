@@ -362,7 +362,7 @@ def api():
         try:
             api_dict = {"file_list": get_file(index)[index], "index": index, "up_file":
                 get_up_file(index), "index_list": index_list, "name": set.name, "background_img": set.background_img}
-            return str(api_dict)
+            return api_dict
         except Exception:
             return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
