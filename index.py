@@ -364,9 +364,9 @@ def api():
                 get_up_file(index), "index_list": index_list, "name": set.name, "background_img": set.background_img}
             return str(api_dict)
         except Exception:
-            return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
+            return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
-                            "/", "name": set.name, "background_img": set.background_img})
+                            "/", "name": set.name, "background_img": set.background_img}
     else:
         try:
             fullfilename = index
@@ -377,13 +377,13 @@ def api():
             if filename in download_url:
                 download_url = download_url[filename]
                 return str({"download_url": download_url, "index": index, "up_file": get_up_file(index)})
-            return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
+            return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
-                            "/", "name": set.name, "background_img": set.background_img})
+                            "/", "name": set.name, "background_img": set.background_img}
         except Exception:
-            return str({"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
+            return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
-                            "/", "name": set.name, "background_img": set.background_img})
+                            "/", "name": set.name, "background_img": set.background_img}
 
 
 # 后台登录
