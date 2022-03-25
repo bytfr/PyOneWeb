@@ -376,7 +376,7 @@ def api():
             download_url = get_file(filepath)["download_url"]
             if filename in download_url:
                 download_url = download_url[filename]
-                return str({"download_url": download_url, "index": index, "up_file": get_up_file(index)})
+                return {"download_url": download_url, "index": index, "up_file": get_up_file(index)}
             return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
                         "index": "Error", "up_file":
                             "/", "name": set.name, "background_img": set.background_img}
