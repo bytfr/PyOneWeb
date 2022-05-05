@@ -390,14 +390,14 @@ def api():
 @app.route('/login', methods=['get', 'post'])
 def login():
     if request.method == 'GET':
-        return render_template('admin/index.html', title=set.title)
+        return render_template('admin/index.html', title=set.title,tz=0)
     user = request.form.get('user')
     pwd = request.form.get('pwd')
-    if user == 'admin' and pwd == set.password:  # 这里可以根据数据库里的用户和密码来判断，因为是最简单的登录界面，数据库学的不是很好，所有没用。
+    if user == 'admin' and pwd == set.password:
         session['user_info'] = user
-        return redirect('/admin')
+        return render_template('admin/index.html', msg={"code": 0, "msg": '登录成功'}, title=set.title, tz=1)
     else:
-        return render_template('admin/index.html', msg='用户名或密码输入错误', title=set.title)
+        return render_template('admin/index.html', msg={"code": 1, "msg": '用户名或密码输入错误'}, title=set.title, tz=0)
 
 
 # 管理员面板
@@ -461,9 +461,11 @@ def preview(p, file):
                 # 如果文件是纯文本但有样式
                 if type in ["html", "md"]:
                     if type == "md":
-                        text = flask.Markup(markdown.markdown(text))
+                        print(text)
+                        text = text.replace("\r\n",r"\n")
                     elif type == "html":
                         return flask.Markup(text)
+            print(text)
             return render_template(set.template + '/preview.html', text=text, up_file=filepath, type=type,
                                    download_url=download_url, logo_url=set.logo_url,
                                    e_mail=set.e_mail, index=filepath,

@@ -119,9 +119,14 @@
 									{{ text }}
 									</textarea>
                         {% elif type == "md" %}
-                            <div class="typo markdown-body">
-                                {{ text }}
-                            </div>
+                            <link rel="stylesheet" href="/static/css/github-markdown-light.css">
+									<article class="markdown-body">
+									<div id="markdown-text"></div>
+									</article>
+									<script src="/static/js/marked.min.js"></script>
+									<script>
+										document.getElementById('markdown-text').innerHTML = marked.parse("{{ text }}")
+									</script>
 						{% else %}
 							<tr>
 							    <td class="link"><a>文件不支持预览</a>

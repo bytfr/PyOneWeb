@@ -259,9 +259,14 @@
 									{{ text }}
 									</textarea>
 								{% elif type == "md" %}
-									<div class="typo markdown-body">
-										{{ text }}
-									</div>
+									<link rel="stylesheet" href="/static/css/github-markdown-light.css">
+									<article class="markdown-body">
+									<div id="markdown-text"></div>
+									</article>
+									<script src="/static/js/marked.min.js"></script>
+									<script>
+										document.getElementById('markdown-text').innerHTML = marked.parse("{{ text }}")
+									</script>
 								{% else %}
 									<li class="mdui-list-item file mdui-ripple filter">
                         <div class="simple-spinner loading-gif" style="display: none;"></div>

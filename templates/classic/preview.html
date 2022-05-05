@@ -80,9 +80,14 @@
 					{% elif type in ["png","jpg"] %}
 						<img src="{{download_url}}" width="100%" height="50%" />
 					{% elif type == "md" %}
-						<div class="typo markdown-body">
-							{{ text }}
-						</div>
+						<link rel="stylesheet" href="/static/css/github-markdown-light.css">
+									<article class="markdown-body">
+									<div id="markdown-text"></div>
+									</article>
+									<script src="/static/js/marked.min.js"></script>
+									<script>
+										document.getElementById('markdown-text').innerHTML = marked.parse("{{ text }}")
+									</script>
 					{% else %}
 						<td class="file-name"><a class="icon icon-file">文件不支持预览</a></td>
 						<td class="file-size"></td>
