@@ -19,7 +19,7 @@ UserName.onkeydown = function(e){
         return;
     }
 	// 不能输入特殊字符
-	if(!( (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 49 && e.keyCode <= 57) || e.key == '_' || e.keyCode == 16 || e.keyCode == 8) ){
+	if(!( (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 48 && e.keyCode <= 57) || e.key == '_' || e.keyCode == 16 || e.keyCode == 8) ){
 		// 回车
 		if(e.keyCode == 13){
 			// 失去焦点
@@ -40,7 +40,7 @@ Pwd.onkeydown = function(e){
         return;
     }
 	// 不输入特殊字符
-	if(!((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 49 && e.keyCode <= 57) || e.key == '_' || e.keyCode == 16 || e.keyCode == 8)){
+	if(!((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 48 && e.keyCode <= 57) || e.key == '_' || e.keyCode == 16 || e.keyCode == 8)){
 		// 回车
 		if(e.keyCode == 13){
 			// 失去焦点

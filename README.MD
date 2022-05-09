@@ -33,17 +33,16 @@ https://www.bilibili.com/video/BV1Sa411k71c
 
 1. 需要安装Python 3(我使用的是Python 3.9版本)  [点击下载](https://www.python.org/downloads/release/python-390/ )
 
-2. 安装所需模块
+2. 安装所需模块 (有些电脑或系统要把pip改为pip3)
 
    ```shell
-   pip3 install flask
-   pip3 install requests
-   pip3 install markdown
+   pip install flask
+   pip install requests
    ```
 
 3. 运行
 
-   在文件夹打开cmd输入 python index.py (如果会使用gunicorn最好)
+   在文件夹打开cmd输入 python index.py (有些电脑或系统要把python改为python3 如果会使用gunicorn最好)
 
 4. 配置
 

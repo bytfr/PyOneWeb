@@ -10,7 +10,6 @@ import onedrive
 
 try:
     import requests
-    import markdown
 except Exception:
     pass
 
@@ -157,6 +156,7 @@ def get_file(path):
                                "date": i["fileSystemInfo"]["lastModifiedDateTime"], "url": path + i["name"],
                                "type": "file"})
             file["download_url"][i["name"]] = i["@content.downloadUrl"]
+    print(file)
     return file
 
 
@@ -241,13 +241,6 @@ def install():
             tj["requests"] = True
         except Exception:
             tj["requests"] = False
-            tj["go"] = False
-
-        try:
-            import markdown
-            tj["markdown"] = True
-        except Exception:
-            tj["markdown"] = False
             tj["go"] = False
         return render_template("install/0.html", tj=tj)
 
@@ -365,8 +358,8 @@ def api():
             return api_dict
         except Exception:
             return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
-                        "index": "Error", "up_file":
-                            "/", "name": set.name, "background_img": set.background_img}
+                    "index": "Error", "up_file":
+                        "/", "name": set.name, "background_img": set.background_img}
     else:
         try:
             fullfilename = index
@@ -378,19 +371,19 @@ def api():
                 download_url = download_url[filename]
                 return {"download_url": download_url, "index": index, "up_file": get_up_file(index)}
             return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
-                        "index": "Error", "up_file":
-                            "/", "name": set.name, "background_img": set.background_img}
+                    "index": "Error", "up_file":
+                        "/", "name": set.name, "background_img": set.background_img}
         except Exception:
             return {"file_list": [{"name": "Error 404", "size": "", "date": "", "url": "", "type": "file"}],
-                        "index": "Error", "up_file":
-                            "/", "name": set.name, "background_img": set.background_img}
+                    "index": "Error", "up_file":
+                        "/", "name": set.name, "background_img": set.background_img}
 
 
 # 后台登录
 @app.route('/login', methods=['get', 'post'])
 def login():
     if request.method == 'GET':
-        return render_template('admin/index.html', title=set.title,tz=0)
+        return render_template('admin/index.html', title=set.title, tz=0)
     user = request.form.get('user')
     pwd = request.form.get('pwd')
     if user == 'admin' and pwd == set.password:
@@ -462,7 +455,7 @@ def preview(p, file):
                 if type in ["html", "md"]:
                     if type == "md":
                         print(text)
-                        text = text.replace("\r\n",r"\n")
+                        text = text.replace("\r\n", r"\n")
                     elif type == "html":
                         return flask.Markup(text)
             print(text)
@@ -499,6 +492,6 @@ def logout_():
 # ======= 运行 ======= #
 
 if __name__ == '__main__':
-    app.run(debug=True, port=80, host="0.0.0.0")
+    app.run(debug=True, port=4211, host="0.0.0.0")
 
 # ======= 运行 ======= #
