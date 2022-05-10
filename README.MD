@@ -38,6 +38,7 @@ https://www.bilibili.com/video/BV1Sa411k71c
    ```shell
    pip install flask
    pip install requests
+   pip install flask-cors
    ```
 
 3. 运行

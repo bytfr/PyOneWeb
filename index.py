@@ -1,7 +1,6 @@
 # coding:utf-8
 import flask
 from flask import Flask, render_template, request, session, redirect
-from flask_cors import *
 
 import json
 import os
@@ -9,6 +8,7 @@ import time
 import onedrive
 
 try:
+    from flask_cors import *
     import requests
 except Exception:
     pass
@@ -241,6 +241,13 @@ def install():
             tj["requests"] = True
         except Exception:
             tj["requests"] = False
+            tj["go"] = False
+
+        try:
+            import flask_cors
+            tj["flask-cors"] = True
+        except Exception:
+            tj["flask-cors"] = False
             tj["go"] = False
         return render_template("install/0.html", tj=tj)
 
