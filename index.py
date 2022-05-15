@@ -156,7 +156,6 @@ def get_file(path):
                                "date": i["fileSystemInfo"]["lastModifiedDateTime"], "url": path + i["name"],
                                "type": "file"})
             file["download_url"][i["name"]] = i["@content.downloadUrl"]
-    print(file)
     return file
 
 
@@ -461,11 +460,9 @@ def preview(p, file):
                 # 如果文件是纯文本但有样式
                 if type in ["html", "md"]:
                     if type == "md":
-                        print(text)
                         text = text.replace("\r\n", r"\n")
                     elif type == "html":
                         return flask.Markup(text)
-            print(text)
             return render_template(set.template + '/preview.html', text=text, up_file=filepath, type=type,
                                    download_url=download_url, logo_url=set.logo_url,
                                    e_mail=set.e_mail, index=filepath,
@@ -499,6 +496,6 @@ def logout_():
 # ======= 运行 ======= #
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4211, host="0.0.0.0")
+    app.run(debug=True, port=80, host="0.0.0.0")
 
 # ======= 运行 ======= #
